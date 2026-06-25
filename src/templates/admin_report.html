@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="h4 mb-3">Admin Report</h2>
+<p class="text-muted">This report summarizes bookings by resource and by department for administrative use.</p>
+<div class="d-flex align-items-center gap-3 mb-3">
+    <span class="badge bg-warning text-dark">PendingApproval: {{ pending_approvals_count }}</span>
+    <button class="btn btn-outline-secondary btn-sm" type="button" onclick="window.print()">Export PDF</button>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="h5">Bookings per Resource</h3>
+                <table class="table table-striped table-hover">
+                    <thead><tr><th>Resource</th><th>Booking Count</th></tr></thead>
+                    <tbody>
+                        {% for row in resource_rows %}
+                            <tr><td>{{ row.resource_name }}</td><td>{{ row.booking_count }}</td></tr>
+                        {% else %}
+                            <tr><td colspan="2" class="text-muted">No booking data.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="h5">Bookings per Department</h3>
+                <table class="table table-striped table-hover">
+                    <thead><tr><th>Department</th><th>Booking Count</th></tr></thead>
+                    <tbody>
+                        {% for row in department_rows %}
+                            <tr><td>{{ row.department_name }}</td><td>{{ row.booking_count }}</td></tr>
+                        {% else %}
+                            <tr><td colspan="2" class="text-muted">No booking data.</td></tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

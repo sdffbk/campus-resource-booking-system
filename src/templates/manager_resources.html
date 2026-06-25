@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h4 mb-0">Resource Management</h2>
+    <a class="btn btn-primary" href="/manager/resources/new">Add Resource</a>
+</div>
+
+<table class="table table-striped table-hover align-middle">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Location</th>
+            <th>Capacity</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for resource in resources %}
+        <tr>
+            <td>{{ resource.name }}</td>
+            <td>{{ resource.resourceType.name }}</td>
+            <td>{{ resource.location }}</td>
+            <td>{{ resource.capacity }}</td>
+            <td><span class="badge bg-secondary">{{ resource.status }}</span></td>
+            <td>
+                <form class="d-inline-block mb-1" method="post" action="/manager/resources/{{ resource.resourceId }}/status">
+                    <select class="form-select form-select-sm d-inline-block w-auto" name="status">
+                        {% for status in ["Available", "Restricted", "Maintenance", "Faulty"] %}
+                            <option value="{{ status }}" {% if resource.status == status %}selected{% endif %}>{{ status }}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-sm btn-outline-primary" type="submit">Update</button>
+                </form>
+                <a class="btn btn-sm btn-outline-secondary" href="/manager/resources/{{ resource.resourceId }}/edit">Edit</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Profile</h2>
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Name</dt>
+                    <dd class="col-sm-8">{{ user.name }}</dd>
+                    <dt class="col-sm-4">University ID</dt>
+                    <dd class="col-sm-8">{{ user.universityId }}</dd>
+                    <dt class="col-sm-4">Email</dt>
+                    <dd class="col-sm-8">{{ user.email }}</dd>
+                    <dt class="col-sm-4">Department</dt>
+                    <dd class="col-sm-8">{{ user.department.name }}</dd>
+                    <dt class="col-sm-4">Role</dt>
+                    <dd class="col-sm-8">{{ user.role.roleName }}</dd>
+                    <dt class="col-sm-4">Account Status</dt>
+                    <dd class="col-sm-8"><span class="badge bg-secondary">{{ user.accountStatus }}</span></dd>
+                    <dt class="col-sm-4">Last Login</dt>
+                    <dd class="col-sm-8">{{ user.lastLoginAt.strftime("%Y-%m-%d %H:%M") if user.lastLoginAt else "Not recorded" }}</dd>
+                </dl>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7 col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title h4 mb-3">Create Student Account</h2>
+                <form method="post" action="/register">
+                    <div class="mb-3">
+                        <label class="form-label">Full name</label>
+                        <input class="form-control" name="name" placeholder="Aisha Rahman" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">University ID</label>
+                        <input class="form-control" name="universityId" placeholder="U1234567" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input class="form-control" type="email" name="email" placeholder="student@example.edu" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Department</label>
+                        <input class="form-control" name="department" placeholder="Computer Science" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input class="form-control" type="password" name="password" required>
+                    </div>
+                    <button class="btn btn-primary w-100" type="submit">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

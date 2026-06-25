@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% from "_status_badge.html" import booking_status %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="h4 mb-0">My Bookings</h2>
+    <a class="btn btn-primary" href="/resources/search">New Booking</a>
+</div>
+
+{% if bookings %}
+<table class="table table-striped table-hover align-middle">
+    <thead>
+        <tr>
+            <th>Resource</th>
+            <th>Date</th>
+            <th>Start</th>
+            <th>End</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for booking in bookings %}
+        <tr>
+            <td>{{ booking.resource.name }}</td>
+            <td>{{ booking.startTime.strftime("%Y-%m-%d") }}</td>
+            <td>{{ booking.startTime.strftime("%H:%M") }}</td>
+            <td>{{ booking.endTime.strftime("%H:%M") }}</td>
+            <td>{{ booking_status(booking.status) }}</td>
+            <td>
+                {% if booking.startTime > now + timedelta(hours=24) and booking.status in ["Confirmed", "PendingApproval"] %}
+                    <a class="btn btn-sm btn-outline-primary" href="#">Edit</a>
+                    <a class="btn btn-sm btn-outline-danger" href="#">Cancel</a>
+                {% else %}
+                    <span class="text-muted small">No actions</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<div class="alert alert-info">You do not have any bookings yet.</div>
+{% endif %}
+{% endblock %}

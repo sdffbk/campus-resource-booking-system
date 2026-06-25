@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="p-4 p-md-5 bg-white rounded shadow-sm">
+    <div class="row align-items-center">
+        <div class="col-lg-8">
+            <h1 class="display-6">Campus Resource Booking System</h1>
+            <p class="lead text-muted">
+                Search available rooms and campus resources, book time slots, and manage your reservations in one place.
+            </p>
+            {% if session.get("user_id") %}
+                <a class="btn btn-primary me-2" href="/resources/search">Search Resources</a>
+                <a class="btn btn-outline-secondary" href="/bookings/mine">View My Bookings</a>
+            {% else %}
+                <a class="btn btn-primary me-2" href="/register">Register</a>
+                <a class="btn btn-outline-secondary" href="/login">Login</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}

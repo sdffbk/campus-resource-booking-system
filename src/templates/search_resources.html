@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <h2 class="card-title h4 mb-3">Search Resources</h2>
+        <form method="post" action="/resources/search">
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Resource type</label>
+                    <select class="form-select" name="resourceTypeId">
+                        <option value="">Any type</option>
+                        {% for type in resource_types %}
+                            <option value="{{ type.resourceTypeId }}" {% if form.get("resourceTypeId") == type.resourceTypeId|string %}selected{% endif %}>
+                                {{ type.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Location</label>
+                    <input class="form-control" name="location" placeholder="Library, Block A" value="{{ form.get('location', '') }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Minimum capacity</label>
+                    <input class="form-control" type="number" name="capacity" min="1" placeholder="20" value="{{ form.get('capacity', '') }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Date</label>
+                    <input id="search-date" class="form-control" type="date" name="date" value="{{ form.get('date', '') }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">Start time</label>
+                    <input id="search-start-time" class="form-control" type="time" name="startTime" value="{{ form.get('startTime', '') }}">
+                </div>
+                <div class="col-md-4">
+                    <label class="form-label">End time</label>
+                    <input id="search-end-time" class="form-control" type="time" name="endTime" value="{{ form.get('endTime', '') }}">
+                </div>
+            </div>
+            <button class="btn btn-primary mt-3" type="submit">Search Availability</button>
+        </form>
+    </div>
+</div>
+
+{% if results %}
+<table class="table table-striped table-hover align-middle">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Location</th>
+            <th>Capacity</th>
+            <th>Features</th>
+            <th>Availability</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in results %}
+        <tr>
+            <td>{{ row.resource.name }}</td>
+            <td>{{ row.resource.location }}</td>
+            <td>{{ row.resource.capacity }}</td>
+            <td>{{ row.resource.features or "" }}</td>
+            <td>
+                {% if row.availability_label == "Free" %}
+                    <span class="badge bg-success">Free</span>
+                {% elif row.availability_label == "Requires Approval" %}
+                    <span class="badge bg-warning text-dark">Requires Approval</span>
+                {% elif row.availability_label == "Busy" %}
+                    <span class="badge bg-danger">Busy</span>
+                {% else %}
+                    <span class="badge bg-secondary">Select time</span>
+                {% endif %}
+            </td>
+            <td>
+                <form method="get" action="/bookings/new/{{ row.resource.resourceId }}">
+                    <input type="hidden" name="date" value="{{ form.get('date', '') }}">
+                    <input type="hidden" name="startTime" value="{{ form.get('startTime', '') }}">
+                    <input type="hidden" name="endTime" value="{{ form.get('endTime', '') }}">
+                    {% set has_time = form.get('date') and form.get('startTime') and form.get('endTime') %}
+                    {% if not has_time %}
+                        <button class="btn btn-sm btn-outline-primary" type="button" onclick="document.getElementById('search-date').focus(); document.getElementById('search-date').scrollIntoView({behavior: 'smooth', block: 'center'});">
+                            Select Date & Time
+                        </button>
+                    {% elif not row.is_available %}
+                        <button class="btn btn-sm btn-secondary" type="button" disabled title="This resource is busy for the selected time">
+                            Busy
+                        </button>
+                    {% elif row.requires_approval %}
+                        <button class="btn btn-sm btn-warning" type="submit">
+                            Request Booking
+                        </button>
+                    {% else %}
+                        <button class="btn btn-sm btn-success" type="submit">
+                            Book
+                        </button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% elif form %}
+<div class="alert alert-info">No available resources found.</div>
+{% endif %}
+{% endblock %}

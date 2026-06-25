@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 class="h4 mb-3">User Management</h2>
+
+<table class="table table-striped table-hover align-middle">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>University ID</th>
+            <th>Email</th>
+            <th>Role</th>
+            <th>Department</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.name }}</td>
+            <td>{{ user.universityId }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.role.roleName }}</td>
+            <td>{{ user.department.name }}</td>
+            <td><span class="badge bg-secondary">{{ user.accountStatus }}</span></td>
+            <td>
+                <form class="d-inline-block mb-1" method="post" action="/admin/users/{{ user.userId }}/status">
+                    <select class="form-select form-select-sm d-inline-block w-auto" name="accountStatus">
+                        {% for status in statuses %}
+                            <option value="{{ status }}" {% if user.accountStatus == status %}selected{% endif %}>{{ status }}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-sm btn-outline-primary" type="submit">Set Status</button>
+                </form>
+                <form class="d-inline-block" method="post" action="/admin/users/{{ user.userId }}/role">
+                    <select class="form-select form-select-sm d-inline-block w-auto" name="roleName">
+                        {% for role in roles %}
+                            <option value="{{ role.roleName }}" {% if user.role.roleName == role.roleName %}selected{% endif %}>{{ role.roleName }}</option>
+                        {% endfor %}
+                    </select>
+                    <button class="btn btn-sm btn-outline-primary" type="submit">Set Role</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

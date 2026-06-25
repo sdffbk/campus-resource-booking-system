@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h4 mb-3">{{ "Request Booking" if resource.status == "Restricted" else "Create Booking" }}</h2>
+                <div class="alert alert-light border">
+                    <strong>{{ resource.name }}</strong><br>
+                    {{ resource.location }} | {{ date }} {{ start_time }} - {{ end_time }}
+                </div>
+                <form method="post" action="/bookings">
+                    <input type="hidden" name="resourceId" value="{{ resource.resourceId }}">
+                    <input type="hidden" name="date" value="{{ date }}">
+                    <input type="hidden" name="startTime" value="{{ start_time }}">
+                    <input type="hidden" name="endTime" value="{{ end_time }}">
+                    <div class="mb-3">
+                        <label class="form-label">Purpose</label>
+                        <input class="form-control" name="purpose" placeholder="Group discussion, lab work, meeting" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Attendees</label>
+                        <input class="form-control" type="number" name="attendeesCount" min="1" max="{{ resource.capacity }}" value="1" required>
+                    </div>
+                    <button class="btn btn-primary" type="submit">
+                        {{ "Submit for Approval" if resource.status == "Restricted" else "Confirm Booking" }}
+                    </button>
+                    <a class="btn btn-outline-secondary" href="/resources/search">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

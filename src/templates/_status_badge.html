@@ -1,0 +1,11 @@
+{% macro booking_status(status) -%}
+    {% set badge_class = {
+        "PendingApproval": "bg-warning text-dark",
+        "Confirmed": "bg-success",
+        "Rejected": "bg-danger",
+        "Cancelled": "bg-secondary",
+        "Completed": "bg-primary",
+        "NoShow": "bg-dark"
+    }.get(status, "bg-secondary") %}
+    <span class="badge {{ badge_class }}">{{ status }}</span>
+{%- endmacro %}

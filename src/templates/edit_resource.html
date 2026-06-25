@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-7">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h4 mb-3">{{ "Edit Resource" if resource else "Add Resource" }}</h2>
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input class="form-control" name="name" value="{{ resource.name if resource else '' }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Resource Type</label>
+                        <select class="form-select" name="resourceTypeId" required>
+                            {% for type in resource_types %}
+                                <option value="{{ type.resourceTypeId }}" {% if resource and resource.resourceTypeId == type.resourceTypeId %}selected{% endif %}>{{ type.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Department</label>
+                        <select class="form-select" name="departmentId" required>
+                            {% for department in departments %}
+                                <option value="{{ department.departmentId }}" {% if resource and resource.departmentId == department.departmentId %}selected{% endif %}>{{ department.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label class="form-label">Location</label>
+                            <input class="form-control" name="location" value="{{ resource.location if resource else '' }}" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label class="form-label">Capacity</label>
+                            <input class="form-control" type="number" name="capacity" min="1" value="{{ resource.capacity if resource else '' }}" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Features</label>
+                        <textarea class="form-control" name="features" rows="3">{{ resource.features if resource else '' }}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Status</label>
+                        <select class="form-select" name="status">
+                            {% for status in ["Available", "Maintenance", "Faulty", "Restricted"] %}
+                                <option value="{{ status }}" {% if resource and resource.status == status %}selected{% endif %}>{{ status }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Save</button>
+                    <a class="btn btn-outline-secondary" href="/manager/resources">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
