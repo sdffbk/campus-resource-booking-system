@@ -1,4 +1,4 @@
-from datetime import timedelta
+from datetime import datetime, timedelta
 
 from flask import current_app
 
@@ -65,6 +65,8 @@ class BookingService:
         booking.endTime = end_time
         booking.purpose = purpose
         booking.attendeesCount = attendees_count
+        if booking.resource.status == "Restricted":
+            booking.status = "PendingApproval"
         db.session.commit()
         return booking
 
@@ -80,8 +82,19 @@ class BookingService:
         return Booking.query.filter_by(userId=user_id).order_by(Booking.startTime.desc()).all()
 
     @staticmethod
+    def get_user_booking(booking_id, user_id):
+        return Booking.query.filter_by(bookingId=booking_id, userId=user_id).first_or_404()
+
+    @staticmethod
     def list_pending_bookings():
         return Booking.query.filter_by(status="PendingApproval").order_by(Booking.startTime.asc()).all()
+
+    @staticmethod
+    def can_user_change_booking(booking):
+        return (
+            booking.status in ("Confirmed", "PendingApproval")
+            and booking.startTime > datetime.utcnow() + timedelta(hours=24)
+        )
 
     @staticmethod
     def approve_booking(booking_id):

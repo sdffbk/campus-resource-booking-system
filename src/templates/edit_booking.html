@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h4 mb-3">Edit Booking</h2>
+                <div class="alert alert-light border">
+                    <strong>{{ booking.resource.name }}</strong><br>
+                    {{ booking.resource.location }}
+                </div>
+                <form method="post" action="/bookings/{{ booking.bookingId }}/edit">
+                    <div class="mb-3">
+                        <label class="form-label">Date</label>
+                        <input class="form-control" type="date" name="date" value="{{ booking.startTime.strftime('%Y-%m-%d') }}" required>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Start Time</label>
+                            <input class="form-control" type="time" name="startTime" value="{{ booking.startTime.strftime('%H:%M') }}" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">End Time</label>
+                            <input class="form-control" type="time" name="endTime" value="{{ booking.endTime.strftime('%H:%M') }}" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Purpose</label>
+                        <input class="form-control" name="purpose" value="{{ booking.purpose }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Attendees</label>
+                        <input class="form-control" type="number" name="attendeesCount" min="1" max="{{ booking.resource.capacity }}" value="{{ booking.attendeesCount }}" required>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Save Changes</button>
+                    <a class="btn btn-outline-secondary" href="/bookings/mine">Back</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

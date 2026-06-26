@@ -47,6 +47,54 @@ def create_booking():
     return redirect("/bookings/mine")
 
 
+def edit_booking_form(booking_id):
+    booking = BookingService.get_user_booking(booking_id, session["user_id"])
+    if not BookingService.can_user_change_booking(booking):
+        flash("This booking can no longer be edited.", "warning")
+        return redirect("/bookings/mine")
+    return render_template("edit_booking.html", booking=booking)
+
+
+def edit_booking(booking_id):
+    booking = BookingService.get_user_booking(booking_id, session["user_id"])
+    if not BookingService.can_user_change_booking(booking):
+        flash("This booking can no longer be edited.", "warning")
+        return redirect("/bookings/mine")
+
+    date = request.form.get("date")
+    if not date or not request.form.get("startTime") or not request.form.get("endTime"):
+        flash("Please select a date, start time, and end time.", "warning")
+        return redirect(f"/bookings/{booking_id}/edit")
+
+    start_time = datetime.fromisoformat(f"{date}T{request.form['startTime']}")
+    end_time = datetime.fromisoformat(f"{date}T{request.form['endTime']}")
+    try:
+        BookingService.modify_booking(
+            booking_id=booking_id,
+            user_id=session["user_id"],
+            start_time=start_time,
+            end_time=end_time,
+            purpose=request.form["purpose"],
+            attendees_count=int(request.form["attendeesCount"]),
+        )
+    except ValueError as exc:
+        flash(str(exc), "danger")
+        return redirect(f"/bookings/{booking_id}/edit")
+
+    flash("Booking updated.", "success")
+    return redirect("/bookings/mine")
+
+
+def cancel_booking(booking_id):
+    booking = BookingService.get_user_booking(booking_id, session["user_id"])
+    if not BookingService.can_user_change_booking(booking):
+        flash("This booking can no longer be cancelled.", "warning")
+        return redirect("/bookings/mine")
+    BookingService.cancel_booking(booking_id, session["user_id"])
+    flash("Booking cancelled.", "success")
+    return redirect("/bookings/mine")
+
+
 def approve_booking(booking_id):
     try:
         BookingService.approve_booking(booking_id)

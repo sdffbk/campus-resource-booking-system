@@ -29,8 +29,10 @@
             <td>{{ booking_status(booking.status) }}</td>
             <td>
                 {% if booking.startTime > now + timedelta(hours=24) and booking.status in ["Confirmed", "PendingApproval"] %}
-                    <a class="btn btn-sm btn-outline-primary" href="#">Edit</a>
-                    <a class="btn btn-sm btn-outline-danger" href="#">Cancel</a>
+                    <a class="btn btn-sm btn-outline-primary" href="/bookings/{{ booking.bookingId }}/edit">Edit</a>
+                    <form class="d-inline" method="post" action="/bookings/{{ booking.bookingId }}/cancel">
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Cancel</button>
+                    </form>
                 {% else %}
                     <span class="text-muted small">No actions</span>
                 {% endif %}

@@ -76,6 +76,21 @@ def register_routes(app):
         methods=["GET"],
     )
     app.add_url_rule(
+        "/bookings/<int:booking_id>/edit",
+        view_func=booker_required(booking_controller.edit_booking_form),
+        methods=["GET"],
+    )
+    app.add_url_rule(
+        "/bookings/<int:booking_id>/edit",
+        view_func=booker_required(booking_controller.edit_booking),
+        methods=["POST"],
+    )
+    app.add_url_rule(
+        "/bookings/<int:booking_id>/cancel",
+        view_func=booker_required(booking_controller.cancel_booking),
+        methods=["POST"],
+    )
+    app.add_url_rule(
         "/profile",
         view_func=login_required(page_controller.profile),
         methods=["GET"],

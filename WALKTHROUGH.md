@@ -26,6 +26,12 @@ Student123!
 
 Student users can search resources, create bookings, and view their own bookings.
 
+Student navigation shows:
+
+```text
+Home | Search | My Bookings | Dashboard | Profile | Logout
+```
+
 ### Search and Book a Resource
 
 1. Click `Search`.
@@ -49,7 +55,11 @@ Student users can search resources, create bookings, and view their own bookings
 
 1. Click `My Bookings`.
 2. Review booking resource, date, time, and status.
-3. Future bookings more than 24 hours away show Edit/Cancel UI placeholders.
+3. Future bookings more than 24 hours away show working `Edit` and `Cancel` actions.
+4. Click `Edit` to change date, time, purpose, or attendee count.
+5. Click `Cancel` to mark the booking as `Cancelled`.
+
+If the edited booking is for a `Restricted` resource, it returns to `PendingApproval` so a Resource Manager or Admin can approve the changed request again.
 
 ## 2. Resource Manager Walkthrough
 
@@ -62,9 +72,17 @@ Manager123!
 
 Resource Managers can approve restricted bookings and manage resource availability/status.
 
-### Pending Approvals
+Resource Manager navigation shows:
 
-1. Click `Pending Approvals`.
+```text
+Home | Dashboard | Resources | Approvals | Profile | Logout
+```
+
+The manager dashboard shows operational counts and management actions instead of personal upcoming bookings.
+
+### Approvals
+
+1. Click `Approvals`.
 2. Review pending booking requests.
 3. Click `Approve` to change status to `Confirmed`.
 4. Click `Reject` to change status to `Rejected`.
@@ -101,9 +119,17 @@ Admin123!
 
 Admins can access all manager features plus reports and user management.
 
-### Admin Report
+Admin navigation shows:
 
-1. Click `Admin Report`.
+```text
+Home | Dashboard | Resources | Approvals | Users | Report | Profile | Logout
+```
+
+The admin dashboard shows system-wide counts and management actions instead of personal upcoming bookings.
+
+### Report
+
+1. Click `Report`.
 2. Review:
    - Bookings per resource.
    - Bookings per department.
@@ -111,9 +137,9 @@ Admins can access all manager features plus reports and user management.
 3. Click `Export PDF`.
 4. Use the browser print dialog to save the report as PDF.
 
-### User Management
+### Users
 
-1. Click `User Management`.
+1. Click `Users`.
 2. Review user details:
    - Name
    - University ID
@@ -144,22 +170,26 @@ Use these quick checks during the demo:
   - Dashboard
   - My Bookings
 - Student cannot access:
-  - Pending Approvals
+  - Approvals
   - Resource Management
-  - Admin Report
-  - User Management
+  - Report
+  - Users
 - Resource Manager can access:
-  - Pending Approvals
+  - Approvals
   - Resource Management
 - Resource Manager cannot access:
-  - Admin Report
-  - User Management
+  - Search
+  - My Bookings
+  - Report
+  - Users
 - Admin can access:
-  - All user pages
-  - Pending Approvals
+  - Approvals
   - Resource Management
-  - Admin Report
-  - User Management
+  - Report
+  - Users
+- Admin cannot access:
+  - Search
+  - My Bookings
 
 ## 5. SRS/SDS Alignment Talking Points
 
@@ -169,10 +199,10 @@ Use this mapping in your presentation:
 |---|---|
 | Student User | Registration, login, search, book, My Bookings, Dashboard |
 | Faculty/Staff Booker | Supported as a role in user management |
-| Resource Manager | Pending approvals and resource status management |
+| Resource Manager | Approvals and resource status management |
 | System Administrator | Reports and user/role/status management |
 | Resource Catalog | `Resource`, `ResourceType`, search page |
-| Booking Management | `BookingService`, create booking, conflict detection |
+| Booking Management | `BookingService`, create/edit/cancel booking, conflict detection |
 | Approval Workflow | Restricted resources create `PendingApproval` bookings |
 | Maintenance Handling | Resource status `Maintenance`/`Faulty` excludes booking |
 | Notification Stub | `Notification` rows are created on booking submission |
@@ -185,13 +215,16 @@ Use this mapping in your presentation:
 2. Search for resources with date/time.
 3. Book an available resource.
 4. Request a restricted resource.
-5. Show My Bookings and Dashboard.
-6. Logout.
-7. Login as Resource Manager.
-8. Approve or reject pending booking.
-9. Edit a resource status.
-10. Logout.
-11. Login as Admin.
-12. Show Admin Report.
-13. Show User Management and role/status controls.
+5. Show My Bookings, then edit or cancel an eligible future booking.
+6. Show the Student Dashboard.
+7. Logout.
+8. Login as Resource Manager.
+9. Review the Manager Dashboard.
+10. Approve or reject pending booking.
+11. Edit a resource status.
+12. Logout.
+13. Login as Admin.
+14. Review the Admin Dashboard.
+15. Show Report.
+16. Show Users and role/status controls.
 
