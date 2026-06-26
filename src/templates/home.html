@@ -8,7 +8,13 @@
             <p class="lead text-muted">
                 Search available rooms and campus resources, book time slots, and manage your reservations in one place.
             </p>
-            {% if session.get("user_id") %}
+            {% if session.get("role_name") == "Admin" %}
+                <a class="btn btn-primary me-2" href="/admin/report">View Report</a>
+                <a class="btn btn-outline-secondary" href="/admin/users">Manage Users</a>
+            {% elif session.get("role_name") == "ResourceManager" %}
+                <a class="btn btn-primary me-2" href="/manager/resources">Manage Resources</a>
+                <a class="btn btn-outline-secondary" href="/bookings/pending">View Approvals</a>
+            {% elif session.get("user_id") %}
                 <a class="btn btn-primary me-2" href="/resources/search">Search Resources</a>
                 <a class="btn btn-outline-secondary" href="/bookings/mine">View My Bookings</a>
             {% else %}

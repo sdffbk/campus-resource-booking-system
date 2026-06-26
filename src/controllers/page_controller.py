@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from flask import flash, redirect, render_template, request, session
 
+from src.models import Booking, Resource, User
 from src.services.booking_service import BookingService
 from src.services.report_service import ReportService
 from src.services.resource_service import ResourceService
@@ -15,6 +16,18 @@ def home():
 
 
 def dashboard():
+    role_name = session.get("role_name")
+    if role_name in ("Admin", "ResourceManager"):
+        dashboard_stats = {
+            "pending_approvals": ReportService.pending_approvals_count(),
+            "total_resources": Resource.query.count(),
+            "unavailable_resources": Resource.query.filter(Resource.status.in_(("Maintenance", "Faulty"))).count(),
+            "confirmed_bookings": Booking.query.filter_by(status="Confirmed").count(),
+        }
+        if role_name == "Admin":
+            dashboard_stats["active_users"] = User.query.filter_by(accountStatus="Active").count()
+        return render_template("dashboard.html", dashboard_stats=dashboard_stats)
+
     bookings = BookingService.list_user_bookings(session["user_id"])
     upcoming_bookings = [booking for booking in bookings if booking.startTime > datetime.utcnow()]
     return render_template("dashboard.html", upcoming_bookings=upcoming_bookings)

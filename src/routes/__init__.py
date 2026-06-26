@@ -25,6 +25,10 @@ def approval_required(handler):
     return role_required("Admin", "ResourceManager")(handler)
 
 
+def booker_required(handler):
+    return role_required("Student", "FacultyStaff")(handler)
+
+
 def role_required(*role_names):
     def decorator(handler):
         @wraps(handler)
@@ -53,22 +57,22 @@ def register_routes(app):
     app.add_url_rule("/logout", view_func=auth_controller.logout, methods=["POST"])
     app.add_url_rule(
         "/bookings",
-        view_func=login_required(booking_controller.create_booking),
+        view_func=booker_required(booking_controller.create_booking),
         methods=["POST"],
     )
     app.add_url_rule(
         "/bookings/new/<int:resource_id>",
-        view_func=login_required(booking_controller.new_booking_form),
+        view_func=booker_required(booking_controller.new_booking_form),
         methods=["GET"],
     )
     app.add_url_rule(
         "/resources/search",
-        view_func=login_required(page_controller.search_resources),
+        view_func=booker_required(page_controller.search_resources),
         methods=["GET", "POST"],
     )
     app.add_url_rule(
         "/bookings/mine",
-        view_func=login_required(page_controller.my_bookings),
+        view_func=booker_required(page_controller.my_bookings),
         methods=["GET"],
     )
     app.add_url_rule(

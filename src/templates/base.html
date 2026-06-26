@@ -16,19 +16,23 @@
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/resources/search">Search</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/bookings/mine">My Bookings</a></li>
-                    <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
-                    {% if session.get("user_id") %}
-                        <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
-                    {% endif %}
-                    {% if session.get("role_name") in ["Admin", "ResourceManager"] %}
-                        <li class="nav-item"><a class="nav-link" href="/bookings/pending">Pending Approvals</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/manager/resources">Resources</a></li>
-                    {% endif %}
                     {% if session.get("role_name") == "Admin" %}
-                        <li class="nav-item"><a class="nav-link" href="/admin/report">Admin Report</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/admin/users">User Management</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/manager/resources">Resources</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/bookings/pending">Approvals</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/admin/users">Users</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/admin/report">Report</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+                    {% elif session.get("role_name") == "ResourceManager" %}
+                        <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/manager/resources">Resources</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/bookings/pending">Approvals</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
+                    {% elif session.get("user_id") %}
+                        <li class="nav-item"><a class="nav-link" href="/resources/search">Search</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/bookings/mine">My Bookings</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/dashboard">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="/profile">Profile</a></li>
                     {% endif %}
                 </ul>
                 <ul class="navbar-nav">
