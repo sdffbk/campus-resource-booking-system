@@ -8,6 +8,10 @@ __pycache__/
 venv/
 .venv/
 .env/
+.venv/
+__pycache__/
+instance/
+*.pyc
 
 # SQLite DB
 *.db
